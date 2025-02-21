@@ -1793,6 +1793,9 @@ GameObject:
   - component: {fileID: 531211913}
   - component: {fileID: 531211911}
   - component: {fileID: 531211912}
+  - component: {fileID: 531211914}
+  - component: {fileID: 531211915}
+  - component: {fileID: 531211916}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1912,10 +1915,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 10
   _jumpForce: 32
-  _groundChech: {fileID: 267212564}
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!95 &531211912
 Animator:
   serializedVersion: 7
@@ -1975,6 +1974,47 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0115766525, y: -0.21996021}
   m_Size: {x: 1.4674644, y: 1.4906187}
   m_Direction: 0
+--- !u!114 &531211914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531211906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0033f8ee88ab38147836dec2a003c042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &531211915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531211906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4f79c897c0abd4fac39bb762099385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundChech: {fileID: 267212564}
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  _checkRadius: 0.1
+--- !u!114 &531211916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531211906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de02c7eaa267fe4b9aabe1e8dfd2055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,8 +2484,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77dbe3ca9f84e8044be2555582b89357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointA: {fileID: 104861397}
-  _pointB: {fileID: 977478026}
+  _patrolPoints:
+  - {fileID: 977478026}
+  - {fileID: 104861397}
   _speed: 4
 --- !u!61 &2098133769
 BoxCollider2D:
@@ -2583,13 +2624,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098133767}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.21, y: 4.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

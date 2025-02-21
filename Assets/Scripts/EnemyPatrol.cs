@@ -2,33 +2,30 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
-    [SerializeField] private Transform _pointA, _pointB;
+    [SerializeField] private Transform[] _patrolPoints;
     [SerializeField] private float _speed = 2f;
 
+    private int _currentTargetIndex = 0;
     private float _targetThreshold = 0.1f;
-
-    private Transform _target;
-    private int _directionMultiplier = 1;
-
-    private void Start()
-    {
-        _target = _pointA;
-    }
 
     private void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
+        if (_patrolPoints.Length == 0) return;
 
-        if (Vector2.Distance(transform.position, _target.position) < _targetThreshold)
+        Transform target = _patrolPoints[_currentTargetIndex];
+        transform.position = Vector2.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
+
+        float distanceSqr = (transform.position - target.position).sqrMagnitude;
+
+        if (distanceSqr < _targetThreshold * _targetThreshold)
         {
-            _target = _target == _pointA ? _pointB : _pointA;
+            _currentTargetIndex = (_currentTargetIndex + 1) % _patrolPoints.Length;
             Flip();
         }
     }
 
     private void Flip()
     {
-        _directionMultiplier *= -1;
-        transform.localScale = new Vector3(_directionMultiplier * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        transform.rotation = Quaternion.Euler(0, _currentTargetIndex == 0 ? 0 : 180, 0);
     }
 }
