@@ -10,12 +10,28 @@ public class PlayerController : MonoBehaviour
     private GroundChecker _groundChecker;
     private InputReader _inputReader;
 
-    private void Start()
+    private Quaternion _rightRotation;
+    private Quaternion _leftRotation;
+
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerAnimator = GetComponent<PlayerAnimator>();
         _groundChecker = GetComponent<GroundChecker>();
         _inputReader = GetComponent<InputReader>();
+
+        _rightRotation = Quaternion.identity;
+        _leftRotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    private void OnEnable()
+    {
+        _inputReader.JumpPressed += Jump;
+    }
+
+    private void OnDisable()
+    {
+        _inputReader.JumpPressed -= Jump;
     }
 
     private void Update()
@@ -25,16 +41,14 @@ public class PlayerController : MonoBehaviour
 
         _playerAnimator.SetSpeed(Mathf.Abs(moveInput));
 
-        if (moveInput > 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if (moveInput < 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-        }
+        transform.rotation = moveInput > 0 ? _rightRotation :
+                             moveInput < 0 ? _leftRotation :
+                             transform.rotation;
+    }
 
-        if (_inputReader.JumpPressed && _groundChecker.IsGrounded)
+    private void Jump()
+    {
+        if (_groundChecker.IsGrounded)
         {
             _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, _jumpForce);
         }

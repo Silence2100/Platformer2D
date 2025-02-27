@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    private Animator _animator;
-
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
+
+    private Animator _animator;
 
     private void Awake()
     {

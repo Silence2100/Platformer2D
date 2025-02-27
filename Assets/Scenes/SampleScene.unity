@@ -238,7 +238,6 @@ GameObject:
   - component: {fileID: 337520888}
   - component: {fileID: 337520887}
   - component: {fileID: 337520889}
-  - component: {fileID: 337520890}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Ground
@@ -1493,18 +1492,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
---- !u!114 &337520890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337520885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29e24f5cd665e884680ff86fa8a80763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &487590451
 GameObject:
   m_ObjectHideFlags: 0
@@ -2485,8 +2472,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _patrolPoints:
-  - {fileID: 977478026}
   - {fileID: 104861397}
+  - {fileID: 977478026}
   _speed: 4
 --- !u!61 &2098133769
 BoxCollider2D:
@@ -2624,13 +2611,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098133767}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -0.21, y: 4.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
