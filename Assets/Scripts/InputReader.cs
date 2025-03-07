@@ -8,7 +8,7 @@ public class InputReader : MonoBehaviour
 
     public event Action JumpPressed;
 
-    public float MoveInput {  get; private set; }
+    public float MoveInput { get; private set; }
 
     private void Update()
     {
