@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimator _playerAnimator;
     private GroundChecker _groundChecker;
     private InputReader _inputReader;
+    private Health _health;
+    private Attack _attack;
 
     private Quaternion _rightRotation;
     private Quaternion _leftRotation;
@@ -19,19 +21,29 @@ public class PlayerController : MonoBehaviour
         _playerAnimator = GetComponent<PlayerAnimator>();
         _groundChecker = GetComponent<GroundChecker>();
         _inputReader = GetComponent<InputReader>();
+        _health = GetComponent<Health>();
+        _attack = GetComponent<Attack>();
 
         _rightRotation = Quaternion.identity;
         _leftRotation = Quaternion.Euler(0, 180, 0);
+
+        _health.HealthChanghed += OnHealthChanged;
+        _health.Died += OnPlayerDied;
     }
 
     private void OnEnable()
     {
         _inputReader.JumpPressed += Jump;
+        _inputReader.AttackPressed += Attack;
     }
 
     private void OnDisable()
     {
         _inputReader.JumpPressed -= Jump;
+        _inputReader.AttackPressed -= Attack;
+
+        _health.HealthChanghed -= OnHealthChanged;
+        _health.Died -= OnPlayerDied;
     }
 
     private void Update()
@@ -46,6 +58,20 @@ public class PlayerController : MonoBehaviour
                              transform.rotation;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<Coin>(out Coin coin))
+        {
+            Destroy(coin.gameObject);
+        }
+
+        if (collision.TryGetComponent<HealthPack>(out HealthPack healthPack))
+        {
+            _health.Heal(healthPack.HealthAmount);
+            Destroy(healthPack.gameObject); 
+        }
+    }
+
     private void Jump()
     {
         if (_groundChecker.IsGrounded)
@@ -54,11 +80,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Attack()
     {
-        if (collision.TryGetComponent<Coin>(out Coin coin))
-        {
-            Destroy(coin.gameObject);
-        }
+        _attack.AttackTarget();
+    }
+
+    private void OnHealthChanged(int currentHealth)
+    {
+        Debug.Log("НР игрока = " + _health.CurrentHealth);
+    }
+
+    private void OnPlayerDied()
+    {
+        Destroy(gameObject);
+        Debug.Log("Player died");
     }
 }
