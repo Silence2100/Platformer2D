@@ -1,5 +1,12 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(GroundChecker))]
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Attack))]
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _speed = 10f;

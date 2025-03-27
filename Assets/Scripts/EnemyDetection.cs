@@ -8,7 +8,8 @@ public class EnemyDetection : MonoBehaviour
     {
         if (collision.TryGetComponent(out PlayerController playerContoller))
         {
-            _enemyPatrol.SetChasing(true);
+            Transform player = playerContoller.transform;
+            _enemyPatrol.SetChasing(true, player);
         }
     }
 
@@ -16,7 +17,8 @@ public class EnemyDetection : MonoBehaviour
     {
         if (collision.TryGetComponent(out PlayerController playerContoller))
         {
-            _enemyPatrol.SetChasing(false);
+            Transform player = playerContoller.transform;
+            _enemyPatrol.SetChasing(false, player);
         }
     }
 }

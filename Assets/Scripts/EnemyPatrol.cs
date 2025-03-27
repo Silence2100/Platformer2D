@@ -1,13 +1,15 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Attack))]
+
 public class EnemyPatrol : MonoBehaviour
 {
     [SerializeField] private Transform[] _patrolPoints;
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private float _chaseSpeed = 4f;
-    [SerializeField] private Transform player;
-    private bool isChasing = false;
-
+    private Transform _player;
+    private bool _isChasing = false;
 
     private float _targetThreshold = 0.1f;
     private int _currentTargetIndex = 0;
@@ -37,7 +39,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private void Update()
     {
-        if (isChasing)
+        if (_isChasing)
         {
             ChasePlayer();
         }
@@ -63,9 +65,9 @@ public class EnemyPatrol : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (player != null)
+        if (_player != null)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, _chaseSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, _player.position, _chaseSpeed * Time.deltaTime);
         }
 
         _attack.AttackTarget();
@@ -87,8 +89,9 @@ public class EnemyPatrol : MonoBehaviour
         Debug.Log("Enemy died");
     }
 
-    public void SetChasing(bool chasing)
+    public void SetChasing(bool chasing, Transform player)
     {
-        isChasing = chasing;
+        _isChasing = chasing;
+        _player = player;
     }
 }

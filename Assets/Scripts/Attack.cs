@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
@@ -13,7 +12,10 @@ public class Attack : MonoBehaviour
 
     private void TryAttack()
     {
-        if (Time.time - _lastAttackTime < _attackCooldown) return;
+        if (Time.time - _lastAttackTime < _attackCooldown)
+        {
+            return;
+        }
 
         Collider2D target = Physics2D.OverlapCircle(_attackPoint.position, _attackRange,_targetLayer);
 
