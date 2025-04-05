@@ -1,20 +1,21 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-[RequireComponent(typeof(Attack))]
+[RequireComponent(typeof(Attacker))]
 
 public class EnemyPatrol : MonoBehaviour
 {
     [SerializeField] private Transform[] _patrolPoints;
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private float _chaseSpeed = 4f;
+    [SerializeField] private EnemyDetection _detection;
     private Transform _player;
     private bool _isChasing = false;
 
     private float _targetThreshold = 0.1f;
     private int _currentTargetIndex = 0;
     private Health _health;
-    private Attack _attack;
+    private Attacker _attack;
 
     private Quaternion _rightRotation;
     private Quaternion _leftRotation;
@@ -22,18 +23,33 @@ public class EnemyPatrol : MonoBehaviour
     private void Awake()
     {
         _health = GetComponent<Health>();
-        _attack = GetComponent<Attack>();
+        _attack = GetComponent<Attacker>();
 
-        _health.HealthChanghed += OnHealthChanged;
+        _health.Changhed += OnHealthChanged;
         _health.Died += OnEnemyDied;
 
         _rightRotation = Quaternion.identity;
         _leftRotation = Quaternion.Euler(0, 180, 0);
     }
 
+    private void OnEnable()
+    {
+        if (_detection != null)
+        {
+            _detection.PlayerDetected += OnPlayerDetected;
+            _detection.PlayerLost += OnPlayerLost;
+        }
+    }
+
     private void OnDisable()
     {
-        _health.HealthChanghed -= OnHealthChanged;
+        if (_detection != null)
+        {
+            _detection.PlayerDetected -= OnPlayerDetected;
+            _detection.PlayerLost -= OnPlayerLost;
+        }
+
+        _health.Changhed -= OnHealthChanged;
         _health.Died -= OnEnemyDied;
     }
 
@@ -60,7 +76,7 @@ public class EnemyPatrol : MonoBehaviour
             Flip();
         }
 
-        _attack.AttackTarget();
+        _attack.Attack();
     }
 
     private void ChasePlayer()
@@ -70,7 +86,7 @@ public class EnemyPatrol : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, _player.position, _chaseSpeed * Time.deltaTime);
         }
 
-        _attack.AttackTarget();
+        _attack.Attack();
     }
 
     private void Flip()
@@ -80,7 +96,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private void OnHealthChanged(int currentHealth)
     {
-        Debug.Log("НР врага = " + _health.CurrentHealth);
+        Debug.Log("НР врага = " + _health.Current);
     }
 
     private void OnEnemyDied()
@@ -89,9 +105,18 @@ public class EnemyPatrol : MonoBehaviour
         Debug.Log("Enemy died");
     }
 
-    public void SetChasing(bool chasing, Transform player)
+    private void OnPlayerDetected(Transform player)
     {
-        _isChasing = chasing;
+        _isChasing = true;
         _player = player;
+    }
+
+    private void OnPlayerLost(Transform player)
+    {
+        if (_player == player)
+        {
+            _isChasing = false;
+            _player = null;
+        }
     }
 }

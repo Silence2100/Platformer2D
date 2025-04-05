@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Attack : MonoBehaviour
+public class Attacker : MonoBehaviour
 {
     [SerializeField] private int _damage = 10;
     [SerializeField] private float _attackRange = 3.0f;
@@ -9,6 +9,8 @@ public class Attack : MonoBehaviour
     [SerializeField] private Transform _attackPoint;
 
     private float _lastAttackTime;
+
+    public void Attack() => TryAttack();
 
     private void TryAttack()
     {
@@ -25,6 +27,4 @@ public class Attack : MonoBehaviour
             _lastAttackTime = Time.time;
         }
     }
-
-    public void AttackTarget() => TryAttack();
 }

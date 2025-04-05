@@ -3,37 +3,40 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int _maxHealth = 100;
-    public int CurrentHealth { get; private set; }
+    [SerializeField] private int _max = 100;
 
-    public event Action<int> HealthChanghed;
+    public int Current { get; private set; }
+
+    public event Action<int> Changhed;
     public event Action Died;
 
     public void Awake()
     {
-        CurrentHealth = _maxHealth;
+        Current = _max;
     }
 
     public void TakeDamage(int damage)
     {
-        if (CurrentHealth <= 0) return;
+        if (Current <= 0) 
+            return;
 
-        CurrentHealth -= damage;
-        CurrentHealth = Mathf.Max(CurrentHealth, 0);
-        HealthChanghed?.Invoke(CurrentHealth);
+        Current -= damage;
+        Current = Mathf.Max(Current, 0);
+        Changhed?.Invoke(Current);
 
-        if (CurrentHealth == 0)
+        if (Current == 0)
         {
             Died?.Invoke();
         }
     }
 
-    public void Heal(int amount)
+    public void TakeHeal(int amount)
     {
-        if (CurrentHealth <= 0) return;
+        if (Current <= 0) 
+            return;
 
-        CurrentHealth += amount;
-        CurrentHealth = Math.Min(CurrentHealth, _maxHealth);
-        HealthChanghed?.Invoke(CurrentHealth);
+        Current += amount;
+        Current = Math.Min(Current, _max);
+        Changhed?.Invoke(Current);
     }
 }

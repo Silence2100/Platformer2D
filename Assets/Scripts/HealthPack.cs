@@ -1,8 +1,12 @@
 using UnityEngine;
 
-public class HealthPack : MonoBehaviour
+public class HealthPack : Item
 {
     [SerializeField] private int _healthAmount = 20;
 
-    public int HealthAmount => _healthAmount;
+    public override void Use(Player player)
+    {
+        Debug.Log($"Мы вылечились на {_healthAmount} HP.");
+        player.Heal(_healthAmount);
+    }
 }
