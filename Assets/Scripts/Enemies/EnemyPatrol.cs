@@ -94,15 +94,11 @@ public class EnemyPatrol : MonoBehaviour
         transform.rotation = transform.rotation == _rightRotation ? _leftRotation : _rightRotation;
     }
 
-    private void OnHealthChanged(int currentHealth)
-    {
-        Debug.Log("НР врага = " + _health.Current);
-    }
+    private void OnHealthChanged(int currentHealth) { }
 
     private void OnEnemyDied()
     {
         Destroy(gameObject);
-        Debug.Log("Enemy died");
     }
 
     private void OnPlayerDetected(Transform player)

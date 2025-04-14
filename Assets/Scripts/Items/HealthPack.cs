@@ -6,7 +6,6 @@ public class HealthPack : Item
 
     public override void Use(Player player)
     {
-        Debug.Log($"Мы вылечились на {_healthAmount} HP.");
         player.Heal(_healthAmount);
     }
 }
