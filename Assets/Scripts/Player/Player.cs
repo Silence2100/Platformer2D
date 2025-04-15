@@ -74,7 +74,6 @@ public class Player : MonoBehaviour, IItemVisitor
     private void OnPlayerDied()
     {
         Destroy(gameObject);
-        Debug.Log("Player died");
     }
 
     public void Heal(int amount)

@@ -11,8 +11,7 @@ public class HealthPack : Item
 
     public void Heal(Player player)
     {
-        Health health = player.GetComponent<Health>();
-        health.TakeHeal(_healthAmount);
+        player.Heal(_healthAmount);
         Destroy(gameObject);
     }
 }
