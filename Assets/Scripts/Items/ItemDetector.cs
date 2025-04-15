@@ -4,18 +4,10 @@ public class ItemDetector : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Item>(out Item item))
+        if (collision.TryGetComponent<Item>(out var item) &&
+            TryGetComponent<IItemVisitor>(out var visitor))
         {
-            if (item is Coin coin)
-            {
-                coin.Use(GetComponent<Player>());
-                Destroy(coin.gameObject);
-            }
-            else if (item is HealthPack healthPack)
-            {
-                healthPack.Use(GetComponent<Player>());
-                Destroy(healthPack.gameObject);
-            }
+            item.Accept(visitor);
         }
     }
 }

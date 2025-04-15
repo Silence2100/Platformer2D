@@ -2,5 +2,13 @@ using UnityEngine;
 
 public class Coin : Item
 {
-    public override void Use(Player player) { }
+    public override void Accept(IItemVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public void Collect(Player player)
+    {
+        Destroy(gameObject);
+    }
 }

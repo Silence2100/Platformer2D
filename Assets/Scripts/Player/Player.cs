@@ -9,7 +9,7 @@ using UnityEngine;
 [RequireComponent(typeof(Flipper))]
 [RequireComponent(typeof(Jumper))]
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IItemVisitor
 {
     [SerializeField] private float _speed = 10f;
 
@@ -30,13 +30,13 @@ public class Player : MonoBehaviour
         _attack = GetComponent<Attacker>();
         _flipper = GetComponent<Flipper>();
         _jumper = GetComponent<Jumper>();
-
-        _health.Changhed += OnHealthChanged;
-        _health.Died += OnPlayerDied;
     }
 
     private void OnEnable()
     {
+        _health.Changhed += OnHealthChanged;
+        _health.Died += OnPlayerDied;
+
         _input.JumpPressed += Jump;
         _input.AttackPressed += Attack;
     }
@@ -80,5 +80,15 @@ public class Player : MonoBehaviour
     public void Heal(int amount)
     {
         _health.TakeHeal(amount);
+    }
+
+    public void Visit(Coin coin)
+    {
+        coin.Collect(this);
+    }
+
+    public void Visit(HealthPack healthPack)
+    {
+        healthPack.Heal(this);
     }
 }
