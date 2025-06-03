@@ -20,6 +20,21 @@ public class Player : MonoBehaviour, IItemVisitor
     private Flipper _flipper;
     private Jumper _jumper;
 
+    public void Heal(int amount)
+    {
+        _health.TakeHeal(amount);
+    }
+
+    public void Visit(Coin coin)
+    {
+        coin.Collect(this);
+    }
+
+    public void Visit(HealthPack healthPack)
+    {
+        healthPack.Heal(this);
+    }
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -69,20 +84,5 @@ public class Player : MonoBehaviour, IItemVisitor
     private void OnPlayerDied()
     {
         Destroy(gameObject);
-    }
-
-    public void Heal(int amount)
-    {
-        _health.TakeHeal(amount);
-    }
-
-    public void Visit(Coin coin)
-    {
-        coin.Collect(this);
-    }
-
-    public void Visit(HealthPack healthPack)
-    {
-        healthPack.Heal(this);
     }
 }
