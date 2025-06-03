@@ -9,6 +9,8 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private float _chaseSpeed = 4f;
     [SerializeField] private EnemyDetection _detection;
+    [SerializeField] private Transform _visuals;
+
     private Transform _player;
     private bool _isChasing = false;
 
@@ -25,7 +27,6 @@ public class EnemyPatrol : MonoBehaviour
         _health = GetComponent<Health>();
         _attack = GetComponent<Attacker>();
 
-        _health.Changhed += OnHealthChanged;
         _health.Died += OnEnemyDied;
 
         _rightRotation = Quaternion.identity;
@@ -49,7 +50,6 @@ public class EnemyPatrol : MonoBehaviour
             _detection.PlayerLost -= OnPlayerLost;
         }
 
-        _health.Changhed -= OnHealthChanged;
         _health.Died -= OnEnemyDied;
     }
 
@@ -91,10 +91,8 @@ public class EnemyPatrol : MonoBehaviour
 
     private void Flip()
     {
-        transform.rotation = transform.rotation == _rightRotation ? _leftRotation : _rightRotation;
+        _visuals.rotation = _visuals.rotation == _rightRotation ? _leftRotation : _rightRotation;
     }
-
-    private void OnHealthChanged(int currentHealth) { }
 
     private void OnEnemyDied()
     {

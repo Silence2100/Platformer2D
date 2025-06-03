@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Attacker))]
@@ -24,7 +23,7 @@ public class Player : MonoBehaviour, IItemVisitor
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<PlayerAnimator>();
+        _animator = GetComponentInChildren<PlayerAnimator>();
         _input = GetComponent<InputReader>();
         _health = GetComponent<Health>();
         _attack = GetComponent<Attacker>();
@@ -34,11 +33,10 @@ public class Player : MonoBehaviour, IItemVisitor
 
     private void OnEnable()
     {
-        _health.Changhed += OnHealthChanged;
-        _health.Died += OnPlayerDied;
-
         _input.JumpPressed += Jump;
         _input.AttackPressed += Attack;
+
+        _health.Died += OnPlayerDied;
     }
 
     private void OnDisable()
@@ -46,7 +44,6 @@ public class Player : MonoBehaviour, IItemVisitor
         _input.JumpPressed -= Jump;
         _input.AttackPressed -= Attack;
 
-        _health.Changhed -= OnHealthChanged;
         _health.Died -= OnPlayerDied;
     }
 
@@ -68,8 +65,6 @@ public class Player : MonoBehaviour, IItemVisitor
     {
         _attack.Attack();
     }
-
-    private void OnHealthChanged(int currentHealth) { }
 
     private void OnPlayerDied()
     {
