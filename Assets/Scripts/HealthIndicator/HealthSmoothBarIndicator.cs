@@ -10,8 +10,6 @@ public class HealthSmoothBarIndicator : MonoBehaviour
     [SerializeField] private float _smoothSpeed = 1f;
 
     private Slider _slider;
-    private float _targetValue;
-    private float _displayedValue;
     private Coroutine _smoothRoutine;
 
     private void Start()
@@ -24,12 +22,8 @@ public class HealthSmoothBarIndicator : MonoBehaviour
         {
             _health.ValueChanged += OnHealthChanged;
 
-            float normalized = (_health.Max > 0f) 
-                ? _health.Current / (float)_health.Max 
-                : 0f;
-            _targetValue = normalized;
-            _displayedValue = normalized;
-            _slider.value = normalized;
+            float initialNormalized = (_health.Max > 0f) ? _health.Current / (float)_health.Max : 0f;
+            _slider.value = initialNormalized;
         }
     }
 
@@ -40,33 +34,40 @@ public class HealthSmoothBarIndicator : MonoBehaviour
 
     private void OnHealthChanged(float current, float max)
     {
-        if (max > 0f)
-        {
-            _targetValue = Mathf.Clamp01(current / max);
-        }
-        else
-        {
-            _targetValue = 0f;
-        }
+        float targetNormalized = (max > 0f) ? Mathf.Clamp01(current / max) : 0f;
 
         if (_smoothRoutine != null)
         {
             StopCoroutine(_smoothRoutine);
         }
 
-        _smoothRoutine = StartCoroutine(SmoothFill());
+        float startNormalized = _slider.value;
+        float difference = Mathf.Abs(targetNormalized - startNormalized);
+
+        if (difference == 0f)
+        {
+            _slider.value = targetNormalized;
+            return;
+        }
+
+        float duration = difference / _smoothSpeed;
+        _smoothRoutine = StartCoroutine(SmoothFill(startNormalized, targetNormalized, duration));
     }
 
-    private IEnumerator SmoothFill()
+    private IEnumerator SmoothFill(float startValue, float targetValue, float duration)
     {
-        while (!Mathf.Approximately(_displayedValue, _targetValue))
-        {
-            _displayedValue = Mathf.MoveTowards(_displayedValue, _targetValue, _smoothSpeed * Time.deltaTime);
+        float elapsed = 0f;
 
-            _slider.value = _displayedValue;
+        while (elapsed < duration)
+        {
+            float normalizedTime = elapsed / duration;
+            _slider.value = Mathf.Lerp(startValue, targetValue, normalizedTime);
+            elapsed += Time.deltaTime;
+
             yield return null;
         }
 
+        _slider.value = targetValue;
         _smoothRoutine = null;
     }
 }

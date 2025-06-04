@@ -1,20 +1,23 @@
+using System.Xml.Serialization;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Attacker))]
 [RequireComponent(typeof(EnemyDetection))]
 
-public class EnemyController : MonoBehaviour
+public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private PatrolBehavior _patrolBehavior;
     [SerializeField] private ChaseBehavior _chaseBehavior;
 
     private Health _health;
+    private Attacker _attacker;
     private EnemyDetection _detection;
 
     private void Awake()
     {
         _health = GetComponent<Health>();
+        _attacker = GetComponent<Attacker>();
         _detection = GetComponent<EnemyDetection>();
 
         _health.Died += OnEnemyDied;
@@ -28,11 +31,13 @@ public class EnemyController : MonoBehaviour
         if (_patrolBehavior != null)
         {
             _patrolBehavior.enabled = true;
+            _patrolBehavior.AttackRequested += HandleAttackRequested;
         }
 
         if (_chaseBehavior != null)
         {
             _chaseBehavior.enabled = false;
+            _chaseBehavior.AttackRequested += HandleAttackRequested;
         }
     }
 
@@ -47,6 +52,16 @@ public class EnemyController : MonoBehaviour
         {
             _detection.PlayerDetected -= OnPlayerDetected;
             _detection.PlayerLost -= OnPlayerLost;
+        }
+
+        if (_patrolBehavior != null)
+        {
+            _patrolBehavior.AttackRequested -= HandleAttackRequested;
+        }
+
+        if (_chaseBehavior != null)
+        {
+            _chaseBehavior.AttackRequested -= HandleAttackRequested;
         }
     }
 
@@ -75,6 +90,11 @@ public class EnemyController : MonoBehaviour
         {
             _patrolBehavior.enabled = true;
         }
+    }
+
+    private void HandleAttackRequested()
+    {
+        _attacker.Attack();
     }
 
     private void OnEnemyDied()

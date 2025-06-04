@@ -1,6 +1,5 @@
+using System;
 using UnityEngine;
-
-[RequireComponent(typeof(Attacker))]
 
 public class PatrolBehavior : MonoBehaviour
 {
@@ -8,7 +7,8 @@ public class PatrolBehavior : MonoBehaviour
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private Transform _visuals;
 
-    private Attacker _attacker;
+    public event Action AttackRequested;
+
     private int _currentTargetIndex = 0;
     private float _targetThreshold = 0.1f;
 
@@ -17,7 +17,6 @@ public class PatrolBehavior : MonoBehaviour
 
     private void Awake()
     {
-        _attacker = GetComponent<Attacker>();
         _rightRotation = Quaternion.identity;
         _leftRotation = Quaternion.Euler(0, 180, 0);
     }
@@ -34,7 +33,7 @@ public class PatrolBehavior : MonoBehaviour
             FlipVisuals();
         }
 
-        _attacker.Attack();
+        AttackRequested?.Invoke();
     }
 
     private void FlipVisuals()

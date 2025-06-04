@@ -1,19 +1,14 @@
+using System;
 using UnityEngine;
-
-[RequireComponent(typeof(Attacker))]
 
 public class ChaseBehavior : MonoBehaviour
 {
     [SerializeField] private float _chaseSpeed = 4f;
     [SerializeField] private Transform _visuals;
 
-    private Attacker _attacker;
-    private Transform _player;
+    public event Action AttackRequested;
 
-    private void Awake()
-    {
-        _attacker = GetComponent<Attacker>();
-    }
+    private Transform _player;
 
     public void SetTarget(Transform playerTransform)
     {
@@ -24,8 +19,11 @@ public class ChaseBehavior : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, _player.position, _chaseSpeed * Time.deltaTime);
 
-        _attacker.Attack();
         FlipTowardsPlayer();
+
+        float sqrDistance = (transform.position - _player.position).sqrMagnitude;
+
+        AttackRequested?.Invoke();
     }
 
     private void FlipTowardsPlayer()

@@ -21,7 +21,7 @@ public class Attacker : MonoBehaviour
 
         Collider2D target = Physics2D.OverlapCircle(_attackPoint.position, _attackRange,_targetLayer);
 
-        if (target != null && target.TryGetComponent<Health>(out Health targetHealth))
+        if (target != null && target.TryGetComponent(out Health targetHealth))
         {
             targetHealth.TakeDamage(_damage);
             _lastAttackTime = Time.time;
