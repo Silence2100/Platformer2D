@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(ItemDetector))]
 [RequireComponent(typeof(Flipper))]
 [RequireComponent(typeof(Jumper))]
+[RequireComponent(typeof(VampireAbility))]
 
 public class Player : MonoBehaviour, IItemVisitor
 {
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour, IItemVisitor
     private Attacker _attack;
     private Flipper _flipper;
     private Jumper _jumper;
+    private VampireAbility _vampireAbility;
 
     public void Heal(int amount)
     {
@@ -44,12 +46,14 @@ public class Player : MonoBehaviour, IItemVisitor
         _attack = GetComponent<Attacker>();
         _flipper = GetComponent<Flipper>();
         _jumper = GetComponent<Jumper>();
+        _vampireAbility = GetComponent<VampireAbility>();
     }
 
     private void OnEnable()
     {
         _input.JumpPressed += Jump;
         _input.AttackPressed += Attack;
+        _input.VampirePressed += OnVampirePressed;
 
         _health.Died += OnPlayerDied;
     }
@@ -58,6 +62,7 @@ public class Player : MonoBehaviour, IItemVisitor
     {
         _input.JumpPressed -= Jump;
         _input.AttackPressed -= Attack;
+        _input.VampirePressed -= OnVampirePressed;
 
         _health.Died -= OnPlayerDied;
     }
@@ -79,6 +84,14 @@ public class Player : MonoBehaviour, IItemVisitor
     private void Attack()
     {
         _attack.Attack();
+    }
+
+    private void OnVampirePressed()
+    {
+        if (_vampireAbility != null)
+        {
+            _vampireAbility.TryActivate();
+        }
     }
 
     private void OnPlayerDied()
