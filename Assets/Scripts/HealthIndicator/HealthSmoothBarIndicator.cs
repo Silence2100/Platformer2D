@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-
 public class HealthSmoothBarIndicator : MonoBehaviour
 {
     [SerializeField] private Health _health;
@@ -20,7 +19,7 @@ public class HealthSmoothBarIndicator : MonoBehaviour
 
         if (_health != null)
         {
-            _health.ValueChanged += OnHealthChanged;
+            _health.ValueChanged += HandleHealthChanged;
 
             float initialNormalized = (_health.Max > 0f) ? _health.Current / (float)_health.Max : 0f;
             _slider.value = initialNormalized;
@@ -29,32 +28,39 @@ public class HealthSmoothBarIndicator : MonoBehaviour
 
     private void OnDestroy()
     {
-        _health.ValueChanged -= OnHealthChanged;
+        _health.ValueChanged -= HandleHealthChanged;
     }
 
-    private void OnHealthChanged(float current, float max)
+    private void HandleHealthChanged(float current, float max)
     {
         float targetNormalized = (max > 0f) ? Mathf.Clamp01(current / max) : 0f;
 
         if (_smoothRoutine != null)
         {
             StopCoroutine(_smoothRoutine);
+            _smoothRoutine = null;
         }
 
         float startNormalized = _slider.value;
-        float difference = Mathf.Abs(targetNormalized - startNormalized);
 
-        if (difference == 0f)
+        if (Mathf.Approximately(startNormalized, targetNormalized))
         {
             _slider.value = targetNormalized;
             return;
         }
 
-        float duration = difference / _smoothSpeed;
-        _smoothRoutine = StartCoroutine(SmoothFill(startNormalized, targetNormalized, duration));
+        StartSmoothTransition(startNormalized, targetNormalized);
     }
 
-    private IEnumerator SmoothFill(float startValue, float targetValue, float duration)
+    private void StartSmoothTransition(float fromValue, float toValue)
+    {
+        float difference = Mathf.Abs(toValue - fromValue);
+        float duration = difference / _smoothSpeed;
+
+        _smoothRoutine = StartCoroutine(AnimateSlider(fromValue, toValue, duration));
+    }
+
+    private IEnumerator AnimateSlider(float startValue, float targetValue, float duration)
     {
         float elapsed = 0f;
 

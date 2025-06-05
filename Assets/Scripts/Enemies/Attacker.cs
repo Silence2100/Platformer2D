@@ -10,6 +10,8 @@ public class Attacker : MonoBehaviour
 
     private float _lastAttackTime;
 
+    public float AttackRange => _attackRange;
+
     public void Attack() => TryAttack();
 
     private void TryAttack()

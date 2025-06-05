@@ -2,7 +2,6 @@ using UnityEngine;
 
 [RequireComponent (typeof(Rigidbody2D))]
 [RequireComponent (typeof(GroundChecker))]
-
 public class Jumper : MonoBehaviour
 {
     [SerializeField] private float _jumpForce = 32f;

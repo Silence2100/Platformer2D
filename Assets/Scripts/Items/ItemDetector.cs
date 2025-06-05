@@ -4,8 +4,7 @@ public class ItemDetector : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Item>(out var item) &&
-            TryGetComponent<IItemVisitor>(out var visitor))
+        if (collision.TryGetComponent(out Item item) && TryGetComponent(out IItemVisitor visitor))
         {
             item.Accept(visitor);
         }

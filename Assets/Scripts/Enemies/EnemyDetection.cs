@@ -8,7 +8,7 @@ public class EnemyDetection : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Player>(out var player))
+        if (collision.TryGetComponent(out Player player))
         {
             PlayerDetected?.Invoke(player.transform);
         }
@@ -16,7 +16,7 @@ public class EnemyDetection : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Player>(out var player))
+        if (collision.TryGetComponent(out Player player))
         {
             PlayerLost?.Invoke(player.transform);
         }

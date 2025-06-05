@@ -9,6 +9,12 @@ public class ChaseBehavior : MonoBehaviour
     public event Action AttackRequested;
 
     private Transform _player;
+    private Attacker _attacker;
+
+    private void Awake()
+    {
+        _attacker = GetComponent<Attacker>();
+    }
 
     public void SetTarget(Transform playerTransform)
     {
@@ -22,8 +28,13 @@ public class ChaseBehavior : MonoBehaviour
         FlipTowardsPlayer();
 
         float sqrDistance = (transform.position - _player.position).sqrMagnitude;
+        float attackRange = (_attacker != null) ? _attacker.AttackRange : 0f;
+        float attackRangeSq = attackRange * attackRange;
 
-        AttackRequested?.Invoke();
+        if (sqrDistance <= attackRangeSq)
+        {
+            AttackRequested?.Invoke();
+        }
     }
 
     private void FlipTowardsPlayer()

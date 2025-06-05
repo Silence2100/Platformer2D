@@ -7,8 +7,6 @@ public class PatrolBehavior : MonoBehaviour
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private Transform _visuals;
 
-    public event Action AttackRequested;
-
     private int _currentTargetIndex = 0;
     private float _targetThreshold = 0.1f;
 
@@ -32,8 +30,6 @@ public class PatrolBehavior : MonoBehaviour
             _currentTargetIndex = (_currentTargetIndex + 1) % _patrolPoints.Length;
             FlipVisuals();
         }
-
-        AttackRequested?.Invoke();
     }
 
     private void FlipVisuals()

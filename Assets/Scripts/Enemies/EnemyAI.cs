@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Attacker))]
 [RequireComponent(typeof(EnemyDetection))]
-
 public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private PatrolBehavior _patrolBehavior;
@@ -30,7 +29,6 @@ public class EnemyAI : MonoBehaviour
         if (_patrolBehavior != null)
         {
             _patrolBehavior.enabled = true;
-            _patrolBehavior.AttackRequested += HandleAttackRequested;
         }
 
         if (_chaseBehavior != null)
@@ -51,11 +49,6 @@ public class EnemyAI : MonoBehaviour
         {
             _detection.PlayerDetected -= OnPlayerDetected;
             _detection.PlayerLost -= OnPlayerLost;
-        }
-
-        if (_patrolBehavior != null)
-        {
-            _patrolBehavior.AttackRequested -= HandleAttackRequested;
         }
 
         if (_chaseBehavior != null)

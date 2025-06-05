@@ -7,8 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(ItemDetector))]
 [RequireComponent(typeof(Flipper))]
 [RequireComponent(typeof(Jumper))]
-[RequireComponent(typeof(VampireAbility))]
-
+[RequireComponent(typeof(VampireAbilityLogic))]
 public class Player : MonoBehaviour, IItemVisitor
 {
     [SerializeField] private float _speed = 10f;
@@ -20,7 +19,7 @@ public class Player : MonoBehaviour, IItemVisitor
     private Attacker _attack;
     private Flipper _flipper;
     private Jumper _jumper;
-    private VampireAbility _vampireAbility;
+    private VampireAbilityLogic _vampireLogic;
 
     public void Heal(int amount)
     {
@@ -46,7 +45,7 @@ public class Player : MonoBehaviour, IItemVisitor
         _attack = GetComponent<Attacker>();
         _flipper = GetComponent<Flipper>();
         _jumper = GetComponent<Jumper>();
-        _vampireAbility = GetComponent<VampireAbility>();
+        _vampireLogic = GetComponent<VampireAbilityLogic>();
     }
 
     private void OnEnable()
@@ -54,7 +53,6 @@ public class Player : MonoBehaviour, IItemVisitor
         _input.JumpPressed += Jump;
         _input.AttackPressed += Attack;
         _input.VampirePressed += OnVampirePressed;
-
         _health.Died += OnPlayerDied;
     }
 
@@ -63,7 +61,6 @@ public class Player : MonoBehaviour, IItemVisitor
         _input.JumpPressed -= Jump;
         _input.AttackPressed -= Attack;
         _input.VampirePressed -= OnVampirePressed;
-
         _health.Died -= OnPlayerDied;
     }
 
@@ -88,10 +85,7 @@ public class Player : MonoBehaviour, IItemVisitor
 
     private void OnVampirePressed()
     {
-        if (_vampireAbility != null)
-        {
-            _vampireAbility.TryActivate();
-        }
+        _vampireLogic.TryActivate();
     }
 
     private void OnPlayerDied()
